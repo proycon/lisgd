@@ -2,9 +2,6 @@ SRC = lisgd.c
 OBJ = ${SRC:.c=.o}
 LDFLAGS = -linput -lm
 
-X11INC = /usr/X11R6/include
-X11LIB = /usr/X11R6/lib
-
 all: options lisgd
 
 options:
@@ -22,7 +19,7 @@ config.h:
 	cp config.def.h $@
 
 lisgd: ${OBJ}
-	${CC} -g -o $@ ${OBJ} -I${X11INC} -lX11 ${LDFLAGS}
+	${CC} -g -o $@ ${OBJ} ${LDFLAGS}
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin

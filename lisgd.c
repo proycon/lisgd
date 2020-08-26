@@ -73,7 +73,7 @@ unsigned nfdown = 0, nfpendingswipe = 0;
 struct timespec timedown;
 static Display *dpy;
 static int screen;
-static int screenwidth, screenheight;
+static double screenwidth, screenheight;
 
 void
 die(char * msg)
@@ -385,6 +385,9 @@ run()
 		die("Couldn't set mode to capture events");
 	}
 
+	//get input size
+	libinput_device_get_size(d, &screenwidth, &screenheight);
+
 	// E.g. initially invalidate every slot
 	for (i = 0; i < MAXSLOTS; i++) {
 		xend[i] = NOMOTION;
@@ -487,12 +490,6 @@ main(int argc, char *argv[])
 		}
 	}
 
-	//get display size
-	if (!(dpy = XOpenDisplay(0)))
-		die("cannot open display");
-	screen = DefaultScreen(dpy);
-	screenwidth = DisplayWidth(dpy, screen);
-	screenheight = DisplayHeight(dpy, screen);
 
 	// E.g. no gestures passed on CLI - used gestures defined in config.def.h
 	if (gestsarrlen == 0) {
