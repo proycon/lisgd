@@ -387,6 +387,8 @@ run()
 
 	//get input size
 	libinput_device_get_size(d, &screenwidth, &screenheight);
+    printf("screenwidth: %d, screenheight: %d", screenwidth, screenheight);
+
 
 	// E.g. initially invalidate every slot
 	for (i = 0; i < MAXSLOTS; i++) {
