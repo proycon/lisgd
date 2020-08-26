@@ -15,20 +15,20 @@ unsigned int degreesleniency = 15;
 unsigned int timeoutms = 800;
 unsigned int orientation = 0;
 unsigned int verbose = 0;
-double edgesize_x = 50.0;
-double edgesize_y = 50.0;
+double edgesizex = 50.0;
+double edgesizey = 50.0;
 char *device = "/dev/input/event1";
 
 Gesture gestures[] = {
 	/* nfingers  gesturetype  command */
-	{ 1,         SwipeLR,     AnyEdge, AnyDistance, "xdotool key --clearmodifiers Alt+Shift+e" },
-	{ 1,         SwipeRL,     AnyEdge, AnyDistance, "xdotool key --clearmodifiers Alt+Shift+r" },
-	{ 1,         SwipeDLUR,   AnyEdge, AnyDistance, "sxmo_vol.sh up" },
-	{ 1,         SwipeURDL,   AnyEdge, AnyDistance, "sxmo_vol.sh down" },
-	{ 1,         SwipeDRUL,   AnyEdge, AnyDistance, "sxmo_brightness.sh up" },
-	{ 1,         SwipeULDR,   AnyEdge, AnyDistance, "sxmo_brightness.sh down" },
-	{ 2,         SwipeLR,     AnyEdge, AnyDistance, "xdotool key --clearmodifiers Alt+e" },
-	{ 2,         SwipeRL,     AnyEdge, AnyDistance, "xdotool key --clearmodifiers Alt+r" },
-	{ 2,         SwipeDU,     AnyEdge, AnyDistance, "pidof svkbd-sxmo || svkbd-sxmo &" },
-	{ 2,         SwipeUD,     AnyEdge, AnyDistance, "pkill -9 svkbd-sxmo" },
+	{ 1,         SwipeLR,     EdgeAny, DistanceAny, "xdotool key --clearmodifiers Alt+Shift+e" },
+	{ 1,         SwipeRL,     EdgeAny, DistanceAny, "xdotool key --clearmodifiers Alt+Shift+r" },
+	{ 1,         SwipeDLUR,   EdgeAny, DistanceAny, "sxmo_vol.sh up" },
+	{ 1,         SwipeURDL,   EdgeAny, DistanceAny, "sxmo_vol.sh down" },
+	{ 1,         SwipeDRUL,   EdgeAny, DistanceAny, "sxmo_brightness.sh up" },
+	{ 1,         SwipeULDR,   EdgeAny, DistanceAny, "sxmo_brightness.sh down" },
+	{ 2,         SwipeLR,     EdgeAny, DistanceAny, "xdotool key --clearmodifiers Alt+e" },
+	{ 2,         SwipeRL,     EdgeAny, DistanceAny, "xdotool key --clearmodifiers Alt+r" },
+	{ 2,         SwipeDU,     EdgeAny, DistanceAny, "pidof svkbd-sxmo || svkbd-sxmo &" },
+	{ 2,         SwipeUD,     EdgeAny, DistanceAny, "pkill -9 svkbd-sxmo" },
 };

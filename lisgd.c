@@ -30,24 +30,24 @@ enum {
 typedef int Swipe;
 
 enum {
-	AnyEdge,
-	NoEdge,
-	LeftEdge,
-	RightEdge,
-	TopEdge,
-	BottomEdge,
-	TopLeftCorner,
-	TopRightCorner,
-	BottomLeftCorner,
-	BottomRightCorner,
+	EdgeAny,
+	EdgeNone,
+	EdgeLeft,
+	EdgeRight,
+	EdgeTop,
+	EdgeBottom,
+	CornerTopLeft,
+	CornerTopRight,
+	CornerBottomLeft,
+	CornerBottomRight,
 };
 typedef int Edge;
 
 enum {
-	AnyDistance,
-	ShortDistance,
-	MediumDistance,
-	LongDistance,
+	DistanceAny,
+	DistanceShort,
+	DistanceMedium,
+	DistanceLong,
 };
 typedef int Distance;
 
@@ -129,21 +129,21 @@ gesturecalculatedistance(double x0, double y0, double x1, double y1, Swipe swipe
 		case SwipeDU:
 		case SwipeUD:
 			if (dist >= screenheight * 0.66) {
-				return LongDistance;
+				return DistanceLong;
 			} else if (dist >= screenheight * 0.33) {
-				return MediumDistance;
+				return DistanceMedium;
 			} else {
-				return ShortDistance;
+				return DistanceShort;
 			}
 			break;
 		case SwipeLR:
 		case SwipeRL:
 			if (dist >= screenwidth * 0.66) {
-				return LongDistance;
+				return DistanceLong;
 			} else if (dist >= screenwidth * 0.33) {
-				return MediumDistance;
+				return DistanceMedium;
 			} else {
-				return ShortDistance;
+				return DistanceShort;
 			}
 			break;
 		case SwipeULDR:
@@ -151,11 +151,11 @@ gesturecalculatedistance(double x0, double y0, double x1, double y1, Swipe swipe
 		case SwipeDLUR:
 		case SwipeURDL:
 			if (dist >= diag * 0.66) {
-				return LongDistance;
+				return DistanceLong;
 			} else if (dist >= diag * 0.33) {
-				return MediumDistance;
+				return DistanceMedium;
 			} else {
-				return ShortDistance;
+				return DistanceShort;
 			}
 			break;
 	}
@@ -165,35 +165,35 @@ gesturecalculatedistance(double x0, double y0, double x1, double y1, Swipe swipe
 
 Edge
 gesturecalculateedge(double x0, double y0, double x1, double y1) {
-		Edge horizontal = NoEdge;
-		Edge vertical = NoEdge;
-		if (x0 <= edgesize_x) {
-			horizontal = LeftEdge;
-		} else if (x0 >= screenwidth - edgesize_x) {
-			horizontal = RightEdge;
-		} else if (x1 <= edgesize_x) {
-			horizontal = LeftEdge;
-		} else if (x1 >= screenwidth - edgesize_x) {
-			horizontal = RightEdge;
+		Edge horizontal = EdgeNone;
+		Edge vertical = EdgeNone;
+		if (x0 <= edgesizex) {
+			horizontal = EdgeLeft;
+		} else if (x0 >= screenwidth - edgesizex) {
+			horizontal = EdgeRight;
+		} else if (x1 <= edgesizex) {
+			horizontal = EdgeLeft;
+		} else if (x1 >= screenwidth - edgesizex) {
+			horizontal = EdgeRight;
 		}
-		if (y0 <= edgesize_y) {
-			vertical = TopEdge;
-		} else if (y0 >= screenheight - edgesize_y) {
-			vertical = BottomEdge;
-		} else if (y1 <= edgesize_y) {
-			vertical = TopEdge;
-		} else if (y1 >= screenheight - edgesize_y) {
-			vertical = BottomEdge;
+		if (y0 <= edgesizey) {
+			vertical = EdgeTop;
+		} else if (y0 >= screenheight - edgesizey) {
+			vertical = EdgeBottom;
+		} else if (y1 <= edgesizey) {
+			vertical = EdgeTop;
+		} else if (y1 >= screenheight - edgesizey) {
+			vertical = EdgeBottom;
 		}
-		if (horizontal == LeftEdge && vertical == TopEdge) {
-			return TopLeftCorner;
-		} else if (horizontal == RightEdge && vertical == TopEdge) {
-			return TopRightCorner;
-		} else if (horizontal == LeftEdge && vertical == BottomEdge) {
-			return BottomLeftCorner;
-		} else if (horizontal == RightEdge && vertical == BottomEdge) {
-			return BottomRightCorner;
-		} else if (horizontal != NoEdge) {
+		if (horizontal == EdgeLeft && vertical == EdgeTop) {
+			return CornerTopLeft;
+		} else if (horizontal == EdgeRight && vertical == EdgeTop) {
+			return CornerTopRight;
+		} else if (horizontal == EdgeLeft && vertical == EdgeBottom) {
+			return CornerBottomLeft;
+		} else if (horizontal == EdgeRight && vertical == EdgeBottom) {
+			return CornerBottomRight;
+		} else if (horizontal != EdgeNone) {
 			return horizontal;
 		} else {
 			return vertical;
@@ -213,11 +213,11 @@ gestureexecute(Swipe swipe, int nfingers, Edge edge, Distance distance) {
 		}
 		if (gestsarr[i].nfswipe == nfingers && gestsarr[i].swipe == swipe
 			&& gestsarr[i].distance <= distance
-			&& (gestsarr[i].edge == AnyEdge || gestsarr[i].edge == edge ||
-				((edge == TopLeftCorner || edge == TopRightCorner) && gestsarr[i].edge == TopEdge) ||
-				((edge == BottomLeftCorner || edge == BottomRightCorner) && gestsarr[i].edge == BottomEdge) ||
-				((edge == TopLeftCorner || edge == BottomLeftCorner) && gestsarr[i].edge == LeftEdge) ||
-				((edge == TopRightCorner || edge == BottomRightCorner) && gestsarr[i].edge == RightEdge)
+			&& (gestsarr[i].edge == EdgeAny || gestsarr[i].edge == edge ||
+				((edge == CornerTopLeft || edge == CornerTopRight) && gestsarr[i].edge == EdgeTop) ||
+				((edge == CornerBottomLeft || edge == CornerBottomRight) && gestsarr[i].edge == EdgeBottom) ||
+				((edge == CornerTopLeft || edge == CornerBottomLeft) && gestsarr[i].edge == EdgeLeft) ||
+				((edge == CornerTopRight || edge == CornerBottomRight) && gestsarr[i].edge == EdgeRight)
 			   )
 			) {
 			if (verbose) fprintf(stderr, "Execute %s\n", gestsarr[i].command);
@@ -264,14 +264,14 @@ edgereorient(Edge edge, int orientation) {
 	while (orientation > 0) {
 		switch(edge) {
 			// 90deg per turn
-			case LeftEdge:   edge = TopEdge; break;
-			case RightEdge:  edge = BottomEdge; break;
-			case TopEdge:    edge = RightEdge; break;
-			case BottomEdge: edge = LeftEdge; break;
-			case TopLeftCorner: edge = TopRightCorner; break;
-			case TopRightCorner:   edge = BottomRightCorner; break;
-			case BottomLeftCorner: edge = TopLeftCorner; break;
-			case BottomRightCorner: edge = BottomLeftCorner; break;
+			case EdgeLeft:   edge = EdgeTop; break;
+			case EdgeRight:  edge = EdgeBottom; break;
+			case EdgeTop:    edge = EdgeRight; break;
+			case EdgeBottom: edge = EdgeLeft; break;
+			case CornerTopLeft: edge = CornerTopRight; break;
+			case CornerTopRight:   edge = CornerBottomRight; break;
+			case CornerBottomLeft: edge = CornerTopLeft; break;
+			case CornerBottomRight: edge = CornerBottomLeft; break;
 		}
 		orientation--;
 	}
@@ -461,22 +461,22 @@ main(int argc, char *argv[])
 						if (!strcmp(gestpt, "DRUL")) gestsarr[gestsarrlen-1].swipe = SwipeDRUL;
 						break;
 					case 2:
-						if (!strcmp(gestpt, "L")) gestsarr[gestsarrlen-1].edge = LeftEdge;
-						if (!strcmp(gestpt, "R")) gestsarr[gestsarrlen-1].edge = RightEdge;
-						if (!strcmp(gestpt, "T")) gestsarr[gestsarrlen-1].edge = TopEdge;
-						if (!strcmp(gestpt, "B")) gestsarr[gestsarrlen-1].edge = BottomEdge;
-						if (!strcmp(gestpt, "TL")) gestsarr[gestsarrlen-1].edge = TopLeftCorner;
-						if (!strcmp(gestpt, "TR")) gestsarr[gestsarrlen-1].edge = TopRightCorner;
-						if (!strcmp(gestpt, "BL")) gestsarr[gestsarrlen-1].edge = BottomLeftCorner;
-						if (!strcmp(gestpt, "BR")) gestsarr[gestsarrlen-1].edge = BottomRightCorner;
-						if (!strcmp(gestpt, "N")) gestsarr[gestsarrlen-1].edge = NoEdge;
-						if (!strcmp(gestpt, "*")) gestsarr[gestsarrlen-1].edge = AnyEdge;
+						if (!strcmp(gestpt, "L")) gestsarr[gestsarrlen-1].edge = EdgeLeft;
+						if (!strcmp(gestpt, "R")) gestsarr[gestsarrlen-1].edge = EdgeRight;
+						if (!strcmp(gestpt, "T")) gestsarr[gestsarrlen-1].edge = EdgeTop;
+						if (!strcmp(gestpt, "B")) gestsarr[gestsarrlen-1].edge = EdgeBottom;
+						if (!strcmp(gestpt, "TL")) gestsarr[gestsarrlen-1].edge = CornerTopLeft;
+						if (!strcmp(gestpt, "TR")) gestsarr[gestsarrlen-1].edge = CornerTopRight;
+						if (!strcmp(gestpt, "BL")) gestsarr[gestsarrlen-1].edge = CornerBottomLeft;
+						if (!strcmp(gestpt, "BR")) gestsarr[gestsarrlen-1].edge = CornerBottomRight;
+						if (!strcmp(gestpt, "N")) gestsarr[gestsarrlen-1].edge = EdgeNone;
+						if (!strcmp(gestpt, "*")) gestsarr[gestsarrlen-1].edge = EdgeAny;
 						break;
 					case 3:
-						if (!strcmp(gestpt, "L")) gestsarr[gestsarrlen-1].distance = LongDistance;
-						if (!strcmp(gestpt, "M")) gestsarr[gestsarrlen-1].distance = MediumDistance;
-						if (!strcmp(gestpt, "S")) gestsarr[gestsarrlen-1].distance = ShortDistance;
-						if (!strcmp(gestpt, "*")) gestsarr[gestsarrlen-1].distance = AnyDistance;
+						if (!strcmp(gestpt, "L")) gestsarr[gestsarrlen-1].distance = DistanceLong;
+						if (!strcmp(gestpt, "M")) gestsarr[gestsarrlen-1].distance = DistanceMedium;
+						if (!strcmp(gestpt, "S")) gestsarr[gestsarrlen-1].distance = DistanceShort;
+						if (!strcmp(gestpt, "*")) gestsarr[gestsarrlen-1].distance = DistanceAny;
 						break;
 					case 4: gestsarr[gestsarrlen - 1].command = gestpt; break;
 				}
